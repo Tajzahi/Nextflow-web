@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NextFlow Pro Otomasi Entri Data</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style type="text/tailwindcss">
+    @theme {
+      --color-navy: #0f2557;
+      --color-navy-light: #1a3a7c;
+      --color-navy-dark: #091840;
+      --color-teal: #0d9488;
+      --color-teal-light: #14b8a6;
+      --color-gold: #d4a847;
+      --color-gold-light: #f0c85a;
+    }
+  </style>
+  <style>
+    * { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+
+    /* Gradient Backgrounds */
+    .bg-hero {
+      background: linear-gradient(135deg, #0f2557 0%, #1a3a7c 40%, #0d3b6e 70%, #0f2557 100%);
+    }
+    .bg-section-alt {
+      background: linear-gradient(180deg, #f0f7ff 0%, #e8f4fd 100%);
+    }
+
+    /* Gold Gradient Text */
+    .text-gold-gradient {
+      background: linear-gradient(90deg, #d4a847, #f0c85a, #d4a847);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Teal Gradient Text */
+    .text-teal-gradient {
+      background: linear-gradient(90deg, #0d9488, #14b8a6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Card Hover */
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(15, 37, 87, 0.15);
+    }
+
+    /* Pricing Card Popular */
+    .pricing-popular {
+      background: linear-gradient(135deg, #0f2557, #1a3a7c);
+      position: relative;
+      overflow: hidden;
+    }
+    .pricing-popular::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -30%;
+      width: 200px;
+      height: 200px;
+      background: rgba(212, 168, 71, 0.1);
+      border-radius: 50%;
+    }
+
+    /* Step Number */
+    .step-number {
+      background: linear-gradient(135deg, #0d9488, #14b8a6);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    /* Step Connector */
+    .step-connector {
+      width: 2px;
+      flex: 1;
+      background: linear-gradient(180deg, #14b8a6, transparent);
+      min-height: 32px;
+    }
+
+    /* Nav Blur */
+    .nav-blur {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    /* Badge */
+    .badge-popular {
+      background: linear-gradient(90deg, #d4a847, #f0c85a);
+      color: #0f2557;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      padding: 3px 12px;
+      border-radius: 999px;
+    }
+
+    /* Pulse Animation */
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.4); opacity: 0; }
+    }
+    .pulse-dot::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 50%;
+      background: rgba(13, 148, 136, 0.4);
+      animation: pulse-ring 2s infinite;
+    }
+    .pulse-dot { position: relative; display: inline-block; }
+
+    /* Feature Icon */
+    .feature-icon-wrapper {
+      background: linear-gradient(135deg, rgba(13,148,136,0.12), rgba(20,184,166,0.06));
+      border: 1px solid rgba(13,148,136,0.2);
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Accordion */
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+    }
+    .accordion-content.open {
+      max-height: 600px;
+    }
+
+    /* Mobile Menu */
+    #mobile-menu {
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+    }
+    #mobile-menu.open {
+      max-height: 300px;
+      opacity: 1;
+    }
+
+    /* Floating WhatsApp */
+    .floating-wa {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.5);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .floating-wa:hover { transform: scale(1.1); }
+
+    /* Scroll animation */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* CTA Button */
+    .btn-cta {
+      background: linear-gradient(90deg, #d4a847, #f0c85a, #d4a847);
+      background-size: 200% auto;
+      transition: background-position 0.4s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-cta:hover {
+      background-position: right center;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212,168,71,0.5);
+    }
+
+    /* Teal Button */
+    .btn-teal {
+      background: linear-gradient(90deg, #0d9488, #14b8a6);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-teal:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(13,148,136,0.4);
+    }
+
+    /* Hero particles */
+    .hero-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.15;
+    }
+
+    /* Check list */
+    .check-item::before {
+      content: '✓';
+      color: #14b8a6;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+
+    /* Table striped */
+    .table-row:nth-child(even) {
+      background: rgba(13,148,136,0.04);
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-800 antialiased">
+
+  <!-- ===== FLOATING WHATSAPP ===== -->
+  <a href="https://wa.me/6281234899273?text=Halo%2C%20saya%20ingin%20tahu%20lebih%20lanjut%20tentang%20NextFlow%20Pro" target="_blank" class="floating-wa" title="Chat WhatsApp">
+    <i class="fab fa-whatsapp text-white text-2xl"></i>
+  </a>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #d4a847, #f0c85a);">
+            <i class="fas fa-bolt text-white text-sm"></i>
+          </div>
+          <span class="font-bold text-lg text-white">NextFlow <span class="text-gold-gradient">Pro</span></span>
+        </div>
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+          <a href="#fitur" class="text-white/80 hover:text-white transition-colors">Fitur</a>
+          <a href="#harga" class="text-white/80 hover:text-white transition-colors">Harga</a>
+          <a href="#cara-kerja" class="text-white/80 hover:text-white transition-colors">Cara Kerja</a>
+          <a href="#kontak" class="text-white/80 hover:text-white transition-colors">Kontak</a>
+          <a href="#harga" class="btn-cta text-navy px-5 py-2 rounded-full text-sm font-bold" style="color:#0f2557;">Mulai Sekarang</a>
+        </div>
+        <!-- Hamburger -->
+        <button id="hamburger" class="md:hidden text-white text-xl focus:outline-none">
+          <i id="hamburger-icon" class="fas fa-bars"></i>
+        </button>
+      </div>
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="md:hidden">
+        <div class="bg-navy-dark rounded-xl mb-3 px-4 py-3 space-y-3" style="background: #091840;">
+          <a href="#fitur" class="block text-white/80 hover:text-white py-1" onclick="closeMobileMenu()">Fitur</a>
+          <a href="#harga" class="block text-white/80 hover:text-white py-1" onclick="closeMobileMenu()">Harga</a>
+          <a href="#cara-kerja" class="block text-white/80 hover:text-white py-1" onclick="closeMobileMenu()">Cara Kerja</a>
+          <a href="#kontak" class="block text-white/80 hover:text-white py-1" onclick="closeMobileMenu()">Kontak</a>
+          <a href="#harga" class="btn-cta block text-center font-bold py-2 rounded-full text-sm" style="color:#0f2557;" onclick="closeMobileMenu()">Mulai Sekarang</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO SECTION ===== -->
+  <section class="bg-hero min-h-screen flex items-center relative overflow-hidden pt-16">
+    <!-- Glow effects -->
+    <div class="hero-glow" style="width:400px;height:400px;background:#14b8a6;top:-100px;right:-100px;"></div>
+    <div class="hero-glow" style="width:300px;height:300px;background:#d4a847;bottom:-80px;left:-80px;"></div>
+    <div class="hero-glow" style="width:200px;height:200px;background:#3b82f6;top:40%;left:30%;"></div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-20 relative z-10">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <!-- Left Content -->
+        <div>
+          <!-- <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 mb-6 text-sm text-white/90 backdrop-blur-sm">
+            <span class="pulse-dot inline-block w-2 h-2 bg-teal-400 rounded-full"></span>
+            Software Resmi untuk Operator Puskesmas
+          </div> -->
+          <h1 class="text-4xl sm:text-5xl lg:text-5xl font-black text-white leading-tight mb-6">
+            Otomasi Entri Data
+            <span class="text-gold-gradient block mt-1">Lebih Cepat & Akurat</span>
+          </h1>
+          <p class="text-white/75 text-lg leading-relaxed mb-8 max-w-lg">
+            NextFlow Pro membantu operator mengotomasi input data ke sistem, menghemat waktu hingga <strong class="text-white">80%</strong>, dan meminimalkan human error secara signifikan.
+          </p>
+          <div class="flex flex-wrap gap-4 mb-10">
+            <a href="#harga" class="btn-cta font-bold px-8 py-4 rounded-full text-base flex items-center gap-2" style="color:#0f2557;">
+              <i class="fas fa-tags"></i> Lihat Paket
+            </a>
+            <a href="#cara-kerja" class="border border-white/30 text-white hover:bg-white/10 transition-colors font-semibold px-8 py-4 rounded-full text-base flex items-center gap-2">
+              <i class="fas fa-play-circle"></i> Cara Kerja
+            </a>
+          </div>
+          <!-- Stats -->
+          <div class="grid grid-cols-3 gap-4">
+            <div class="text-center">
+              <p class="text-3xl font-black text-gold-gradient">80%</p>
+              <p class="text-white/60 text-xs mt-1">Hemat Waktu</p>
+            </div>
+            <div class="text-center border-x border-white/10">
+              <p class="text-3xl font-black text-teal-gradient">99%</p>
+              <p class="text-white/60 text-xs mt-1">Akurasi Data</p>
+            </div>
+            <div class="text-center">
+              <!--<p class="text-3xl font-black text-white">500+</p>
+              <p class="text-white/60 text-xs mt-1">Pengguna Aktif</p>-->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Card -->
+        <div class="hidden lg:block">
+          <div class="relative">
+            <!-- Main Dashboard Card -->
+            <div class="bg-white/10 border border-white/20 rounded-2xl p-6 backdrop-blur-sm">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                  <div class="w-3 h-3 bg-red-400 rounded-full"></div>
+                  <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                  <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                </div>
+                <span class="text-white/50 text-xs">NextFlow Pro Dashboard</span>
+              </div>
+              <!-- Simulated UI -->
+              <div class="space-y-3">
+                <div class="bg-white/5 rounded-lg p-3 flex items-center justify-between">
+                  <div>
+                    <p class="text-white text-xs font-medium">Status Bot</p>
+                    <p class="text-teal-400 text-sm font-bold">● Aktif & Berjalan</p>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-white/50 text-xs">Hari ini</p>
+                    <p class="text-white font-bold text-sm">247 Entri</p>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="bg-white/5 rounded-lg p-3">
+                    <p class="text-white/50 text-xs">Hit Tersisa</p>
+                    <p class="text-gold-gradient font-bold text-xl">3/250</p>
+                    <div class="w-full bg-white/10 rounded-full h-1.5 mt-2">
+                      <div class="h-1.5 rounded-full" style="width:99%;background:linear-gradient(90deg,#d4a847,#f0c85a);"></div>
+                    </div>
+                  </div>
+                  <div class="bg-white/5 rounded-lg p-3">
+                    <p class="text-white/50 text-xs">Masa Aktif</p>
+                    <p class="text-teal-gradient font-bold text-xl">28 Hari</p>
+                    <div class="w-full bg-white/10 rounded-full h-1.5 mt-2">
+                      <div class="h-1.5 rounded-full" style="width:93%;background:linear-gradient(90deg,#0d9488,#14b8a6);"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-white/5 rounded-lg p-3">
+                  <p class="text-white/50 text-xs mb-2">Entri Terakhir</p>
+                  <div class="space-y-1.5">
+                    <div class="flex items-center justify-between">
+                      <span class="text-white/70 text-xs">Data Pasien #1042</span>
+                      <span class="text-teal-400 text-xs font-medium">✓ Sukses</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-white/70 text-xs">Data Pasien #1041</span>
+                      <span class="text-teal-400 text-xs font-medium">✓ Sukses</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-white/70 text-xs">Data Pasien #1040</span>
+                      <span class="text-teal-400 text-xs font-medium">✓ Sukses</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Floating badges -->
+            <div class="absolute -top-4 -right-4 bg-white rounded-xl shadow-xl px-4 py-2 flex items-center gap-2">
+              <i class="fas fa-shield-halved text-teal-600"></i>
+              <span class="text-xs font-bold text-gray-700">Data Aman & Terenkripsi</span>
+            </div>
+            <div class="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-xl px-4 py-2 flex items-center gap-2">
+              <i class="fas fa-clock text-amber-500"></i>
+              <span class="text-xs font-bold text-gray-700">Hemat 4 Jam/Hari</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wave Divider -->
+    <div class="absolute bottom-0 left-0 right-0">
+      <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="width:100%;display:block;">
+        <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="white"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ===== TRUSTED BY ===== 
+  <section class="py-10 bg-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+      <p class="text-gray-400 text-sm font-medium mb-6 uppercase tracking-widest">Dipercaya oleh Operator Puskesmas di seluruh Indonesia</p>
+      <div class="flex flex-wrap justify-center items-center gap-8 opacity-40">
+        <div class="flex items-center gap-2 text-gray-500 font-semibold text-sm"><i class="fas fa-hospital text-lg"></i> Puskesmas Cempaka</div>
+        <div class="flex items-center gap-2 text-gray-500 font-semibold text-sm"><i class="fas fa-hospital text-lg"></i> Puskesmas Mentari</div>
+        <div class="flex items-center gap-2 text-gray-500 font-semibold text-sm"><i class="fas fa-hospital text-lg"></i> Puskesmas Harapan</div>
+        <div class="flex items-center gap-2 text-gray-500 font-semibold text-sm"><i class="fas fa-hospital text-lg"></i> Puskesmas Sejahtera</div>
+        <div class="flex items-center gap-2 text-gray-500 font-semibold text-sm"><i class="fas fa-hospital text-lg"></i> Puskesmas Nusantara</div>
+      </div>
+    </div>
+  </section>
+  -->
+
+  <!-- ===== FITUR UTAMA ===== -->
+  <section id="fitur" class="py-20 bg-section-alt">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-14 fade-up">
+        <span class="inline-block bg-teal-50 text-teal-700 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-4 border border-teal-100">Fitur Unggulan</span>
+        <h2 class="text-3xl sm:text-4xl font-black text-gray-900">Dirancang Khusus untuk <span class="text-teal-gradient">Kebutuhan Puskesmas</span></h2>
+        <p class="text-gray-500 mt-4 max-w-xl mx-auto">Solusi lengkap yang memahami alur kerja operator puskesmas, dari input data hingga laporan akhir.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="bg-white rounded-2xl p-8 card-hover shadow-sm border border-gray-100 fade-up">
+          <div class="feature-icon-wrapper mb-6">
+            <i class="fas fa-bolt text-teal-600 text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Efisiensi Waktu</h3>
+          <p class="text-gray-500 leading-relaxed mb-5">Bot mengotomasi entri data secara real-time, menggantikan proses manual yang memakan waktu berjam-jam menjadi hanya hitungan menit.</p>
+          <ul class="space-y-2 text-sm text-gray-600">
+            <li class="check-item">Entri data otomatis 24/7</li>
+            <li class="check-item">Kecepatan 10x lebih cepat dari manual</li>
+            <li class="check-item">Proses batch data besar sekaligus</li>
+          </ul>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="bg-white rounded-2xl p-8 card-hover shadow-sm border border-gray-100 fade-up" style="transition-delay:0.1s">
+          <div class="feature-icon-wrapper mb-6">
+            <i class="fas fa-shield-halved text-teal-600 text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Minim Error</h3>
+          <p class="text-gray-500 leading-relaxed mb-5">Dengan validasi data otomatis dan mekanisme retry cerdas, tingkat kesalahan input turun drastis mendekati nol persen.</p>
+          <ul class="space-y-2 text-sm text-gray-600">
+            <!--<li class="check-item">Validasi format data otomatis</li>-->
+            <li class="check-item">Deteksi & koreksi duplikasi data</li>
+            <li class="check-item">Log error lengkap & mudah dilacak</li>
+          </ul>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="bg-white rounded-2xl p-8 card-hover shadow-sm border border-gray-100 fade-up" style="transition-delay:0.2s">
+          <div class="feature-icon-wrapper mb-6">
+            <i class="fas fa-chart-bar text-teal-600 text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Laporan Profesional</h3>
+          <p class="text-gray-500 leading-relaxed mb-5">Generate laporan harian, mingguan, dan bulanan secara otomatis dalam format yang siap diserahkan kepada Operator Kesehatan.</p>
+          <ul class="space-y-2 text-sm text-gray-600">
+            <li class="check-item">Export ke Excel & PDF otomatis</li>
+            <li class="check-item">Rekap data statistik kunjungan</li>
+            <li class="check-item">Dashboard monitoring real-time</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Extra features row -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+        <div class="bg-white rounded-xl px-5 py-4 flex items-center gap-3 border border-gray-100 card-hover fade-up">
+          <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-cloud text-blue-500"></i>
+          </div>
+          <div>
+            <p class="font-semibold text-sm text-gray-800">Cloud-Based</p>
+            <p class="text-xs text-gray-400">Akses dari mana saja</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl px-5 py-4 flex items-center gap-3 border border-gray-100 card-hover fade-up" style="transition-delay:0.05s">
+          <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-headset text-green-500"></i>
+          </div>
+          <div>
+            <p class="font-semibold text-sm text-gray-800">Support 24/7</p>
+            <p class="text-xs text-gray-400">Siap membantu kapan saja</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl px-5 py-4 flex items-center gap-3 border border-gray-100 card-hover fade-up" style="transition-delay:0.1s">
+          <div class="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-lock text-purple-500"></i>
+          </div>
+          <div>
+            <p class="font-semibold text-sm text-gray-800">Enkripsi Data</p>
+            <p class="text-xs text-gray-400">Keamanan tingkat tinggi</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl px-5 py-4 flex items-center gap-3 border border-gray-100 card-hover fade-up" style="transition-delay:0.15s">
+          <div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-mobile-alt text-amber-500"></i>
+          </div>
+          <div>
+            <p class="font-semibold text-sm text-gray-800">Multi-Device</p>
+            <p class="text-xs text-gray-400">PC & laptop </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CARA KERJA ===== -->
+  <section id="cara-kerja" class="py-20 bg-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-14 fade-up">
+        <span class="inline-block bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-4 border border-blue-100">Cara Kerja</span>
+        <h2 class="text-3xl sm:text-4xl font-black text-gray-900">Mulai dalam <span style="background:linear-gradient(90deg,#0f2557,#1a3a7c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">4 Langkah Mudah</span></h2>
+        <p class="text-gray-500 mt-4 max-w-xl mx-auto">Tidak perlu keahlian teknis khusus. Siapapun dapat menggunakan NextFlow Pro.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="flex gap-5 items-start bg-gray-50 rounded-2xl p-6 border border-gray-100 card-hover fade-up">
+          <div class="step-number">1</div>
+          <div>
+            <h3 class="font-bold text-lg text-gray-900 mb-2">Daftar Akun</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Buat akun menggunakan email atau nomor WhatsApp Anda. Proses registrasi hanya memakan waktu kurang dari 2 menit.</p>
+          </div>
+        </div>
+        <div class="flex gap-5 items-start bg-gray-50 rounded-2xl p-6 border border-gray-100 card-hover fade-up" style="transition-delay:0.1s">
+          <div class="step-number">2</div>
+          <div>
+            <h3 class="font-bold text-lg text-gray-900 mb-2">Pilih Paket</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Pilih paket Basic atau Pro sesuai kebutuhan operasional puskesmas Anda. Pembayaran mudah melalui berbagai metode.</p>
+          </div>
+        </div>
+        <div class="flex gap-5 items-start bg-gray-50 rounded-2xl p-6 border border-gray-100 card-hover fade-up" style="transition-delay:0.2s">
+          <div class="step-number">3</div>
+          <div>
+            <h3 class="font-bold text-lg text-gray-900 mb-2">Aktivasi Lisensi</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Setelah pembayaran terkonfirmasi, lisensi akan aktif secara otomatis dalam hitungan menit. Anda akan menerima notifikasi via email.</p>
+          </div>
+        </div>
+        <div class="flex gap-5 items-start bg-gray-50 rounded-2xl p-6 border border-gray-100 card-hover fade-up" style="transition-delay:0.3s">
+          <div class="step-number">4</div>
+          <div>
+            <h3 class="font-bold text-lg text-gray-900 mb-2">Aplikasi siap digunakan</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">NextFlow Pro langsung siap mengotomasi seluruh proses entri data.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-10 fade-up">
+        <a href="#harga" class="btn-teal text-white font-bold px-8 py-4 rounded-full inline-flex items-center gap-2">
+          <i class="fas fa-rocket"></i> Mulai Sekarang
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRICING TABLE ===== -->
+  <section id="harga" class="py-20 bg-section-alt">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-14 fade-up">
+        <span class="inline-block bg-amber-50 text-amber-700 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-4 border border-amber-100">Paket Harga</span>
+        <h2 class="text-3xl sm:text-4xl font-black text-gray-900">Harga Transparan, <span class="text-gold-gradient">Tanpa Biaya Tersembunyi</span></h2>
+        <p class="text-gray-500 mt-4 max-w-xl mx-auto">Pilih paket yang paling sesuai dengan volume kerja puskesmas Anda.</p>
+      </div>
+
+<div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div class="bg-white rounded-2xl p-8 border border-gray-200 card-hover shadow-sm fade-up relative">
+          <div class="mb-6">
+            <p class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-2">Paket Free</p>
+            <div class="flex items-end gap-1 mb-1">
+              <span class="text-4xl font-black text-gray-900">Rp 0</span>
+            </div>
+            <p class="text-gray-400 text-sm">Masa percobaan</p>
+          </div>
+          <hr class="border-gray-100 mb-6"/>
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-center gap-3">
+              <div class="w-5 h-5 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-check text-teal-600 text-xs"></i>
+              </div>
+              <span class="text-gray-700 text-sm"><strong>15 hits/hari</strong> – Otomatis</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="w-5 h-5 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-check text-teal-600 text-xs"></i>
+              </div>
+              <span class="text-gray-700 text-sm">Masa aktif <strong>3 hari</strong></span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="w-5 h-5 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-check text-teal-600 text-xs"></i>
+              </div>
+              <span class="text-gray-700 text-sm">Dashboard & Laporan lengkap</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="w-5 h-5 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-check text-teal-600 text-xs"></i>
+              </div>
+              <span class="text-gray-700 text-sm">Support <strong>Prioritas WhatsApp</strong></span>
+            </li>
+          </ul>
+          <a href="https://wa.me/6281234899273?text=Saya%20ingin%20mencoba%20Paket%20Free%20NextFlow%20Pro" target="_blank"
+             class="block text-center border-2 border-gray-300 font-bold py-3.5 rounded-xl transition-all hover:border-gray-500 hover:text-gray-700 text-gray-500">
+            Coba Gratis
+          </a>
+        </div>
+
+        <div class="bg-white rounded-2xl p-8 border-2 border-gray-100 card-hover shadow-sm fade-up relative" style="transition-delay:0.1s;">
+          <div class="mb-6">
+            <p class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-2">Paket Basic</p>
+            <div class="flex items-end gap-1 mb-1">
+              <span class="text-4xl font-black text-gray-900">Rp 200.000</span>
+            </div>
+            <p class="text-gray-400 text-sm">per 30 hari</p>
+          </div>
+          <hr class="border-gray-100 mb-6"/>
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-center gap-3">
+              <div class="w-5 h-5 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-check text-teal-600 text-xs"></i>
+              </div>
+              <span class="text-gray-700 text-sm"><strong>100 hits/hari</strong> – otomatis</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="w-5 h-5 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-check text-teal-600 text-xs"></i>
+              </div>
+              <span class="text-gray-700 text-sm">Masa aktif <strong>30 hari</strong></span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="w-5 h-5 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-check text-teal-600 text-xs"></i>
+              </div>
+              <span class="text-gray-700 text-sm">Dashboard & Laporan lengkap</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="w-5 h-5 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-check text-teal-600 text-xs"></i>
+              </div>
+              <span class="text-gray-700 text-sm">Support <strong>Prioritas WhatsApp</strong></span>
+            </li>
+
+          </ul>
+          <a href="https://wa.me/6281234899273?text=Saya%20ingin%20berlangganan%20Paket%20Basic%20NextFlow%20Pro" target="_blank"
+             class="block text-center border-2 font-bold py-3.5 rounded-xl transition-all hover:border-teal-500 hover:text-teal-600 text-gray-700" style="border-color:#0d9488;color:#0d9488;">
+            Pilih Paket Basic
+          </a>
+        </div>
+
+        <div class="pricing-popular rounded-2xl p-8 card-hover shadow-2xl relative fade-up" style="transition-delay:0.2s;">
+          <div class="absolute top-4 right-4">
+            <span class="badge-popular">⭐ TERLARIS</span>
+          </div>
+          <div class="mb-6">
+            <p class="text-sm font-bold uppercase tracking-widest text-white/60 mb-2">Paket Pro</p>
+            <div class="flex items-end gap-1 mb-1">
+              <span class="text-4xl font-black text-white">Rp 250.000</span>
+            </div>
+            <p class="text-white/50 text-sm">per 30 hari</p>
+          </div>
+          <hr class="border-white/10 mb-6"/>
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-center gap-3">
+              <div class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(212,168,71,0.2);">
+                <i class="fas fa-check text-xs" style="color:#f0c85a;"></i>
+              </div>
+              <span class="text-white/90 text-sm"><strong class="text-white">250 hits/hari</strong> – otomatis</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(212,168,71,0.2);">
+                <i class="fas fa-check text-xs" style="color:#f0c85a;"></i>
+              </div>
+              <span class="text-white/90 text-sm">Masa aktif <strong class="text-white">30 hari</strong></span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(212,168,71,0.2);">
+                <i class="fas fa-check text-xs" style="color:#f0c85a;"></i>
+              </div>
+              <span class="text-white/90 text-sm">Dashboard & Laporan lengkap</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(212,168,71,0.2);">
+                <i class="fas fa-check text-xs" style="color:#f0c85a;"></i>
+              </div>
+              <span class="text-white/90 text-sm">Support <strong class="text-white">Prioritas WhatsApp</strong></span>
+            </li>
+
+          </ul>
+          <a href="https://wa.me/6281234899273?text=Saya%20ingin%20berlangganan%20Paket%20Pro%20NextFlow%20Pro" target="_blank"
+             class="btn-cta block text-center font-bold py-3.5 rounded-xl" style="color:#0f2557;">
+            Pilih Paket Pro
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-12 bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm fade-up">
+        <div class="px-6 py-4 border-b border-gray-100">
+          <h3 class="font-bold text-gray-900">Perbandingan Lengkap Paket</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm min-w-[600px]">
+            <thead>
+              <tr class="bg-gray-50">
+                <th class="text-left px-6 py-3 font-semibold text-gray-500">Fitur</th>
+                <th class="text-center px-6 py-3 font-semibold text-gray-600">Free</th>
+                <th class="text-center px-6 py-3 font-semibold text-gray-700">Basic</th>
+                <th class="text-center px-6 py-3 font-bold" style="color:#0f2557;">Pro</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-row border-t border-gray-50">
+                <td class="px-6 py-3 text-gray-600">Hits per hari</td>
+                <td class="px-6 py-3 text-center text-gray-600">15</td>
+                <td class="px-6 py-3 text-center font-semibold text-gray-700">100</td>
+                <td class="px-6 py-3 text-center font-bold" style="color:#0d9488;">250</td>
+              </tr>
+              <tr class="table-row border-t border-gray-50">
+                <td class="px-6 py-3 text-gray-600">Masa aktif</td>
+                <td class="px-6 py-3 text-center text-gray-600">3 hari</td>
+                <td class="px-6 py-3 text-center text-gray-700">30 hari</td>
+                <td class="px-6 py-3 text-center text-gray-700">30 hari</td>
+              </tr>
+
+
+              <tr class="table-row border-t border-gray-50">
+                <td class="px-6 py-3 text-gray-600">Support channel</td>
+                <td class="px-6 py-3 text-center font-semibold" style="color:#0d9488;">WhatsApp</td>
+                <td class="px-6 py-3 text-center font-semibold" style="color:#0d9488;">WhatsApp</td>
+                <td class="px-6 py-3 text-center font-semibold" style="color:#0d9488;">WhatsApp</td>
+              </tr>
+              <tr class="table-row border-t border-gray-50">
+                <td class="px-6 py-3 text-gray-600">Harga</td>
+                <td class="px-6 py-3 text-center font-bold text-gray-600">Gratis</td>
+                <td class="px-6 py-3 text-center font-bold text-gray-900">Rp 200.000</td>
+                <td class="px-6 py-3 text-center font-bold" style="color:#0f2557;">Rp 250.000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <!-- Payment Methods -->
+      <div class="mt-8 text-center fade-up">
+        <p class="text-gray-400 text-sm mb-4">Metode Pembayaran yang Diterima</p>
+        <div class="flex flex-wrap justify-center items-center gap-4">
+          <span class="bg-white border border-gray-200 rounded-lg px-4 py-2 text-xs font-semibold text-gray-600 flex items-center gap-2"><i class="fas fa-credit-card text-blue-500"></i> Kartu Kredit/Debit</span>
+          <span class="bg-white border border-gray-200 rounded-lg px-4 py-2 text-xs font-semibold text-gray-600 flex items-center gap-2"><i class="fas fa-university text-green-500"></i> Transfer Bank</span>
+          <span class="bg-white border border-gray-200 rounded-lg px-4 py-2 text-xs font-semibold text-gray-600 flex items-center gap-2"><i class="fas fa-wallet text-purple-500"></i> GoPay / OVO / DANA</span>
+          <span class="bg-white border border-gray-200 rounded-lg px-4 py-2 text-xs font-semibold text-gray-600 flex items-center gap-2"><i class="fas fa-store text-orange-500"></i> Indomaret / Alfamart</span>
+        </div>
+        <p class="text-gray-400 text-xs mt-4 flex items-center justify-center gap-2">
+          <i class="fas fa-lock text-gray-400"></i>
+          Pembayaran aman diproses oleh <strong class="text-gray-500">Midtrans</strong> – payment gateway terpercaya di Indonesia
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIAL ===== -->
+  <section class="py-20 bg-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12 fade-up">
+        <span class="inline-block bg-purple-50 text-purple-700 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-4 border border-purple-100">Testimoni</span>
+        <h2 class="text-3xl sm:text-4xl font-black text-gray-900">Apa Kata <span class="text-teal-gradient">Pengguna Kami</span></h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 card-hover fade-up">
+          <div class="flex items-center gap-1 mb-3">
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+          </div>
+          <p class="text-gray-600 text-sm leading-relaxed mb-5">"NextFlow Pro benar-benar mengubah cara kerja kami. Yang dulu butuh 4 jam untuk input data, sekarang cuma 30 menit. Luar biasa!"</p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm" style="background:linear-gradient(135deg,#0f2557,#1a3a7c);">SN</div>
+            <div>
+              <p class="font-semibold text-sm text-gray-800">Siti Nurhaliza</p>
+              <p class="text-xs text-gray-400">Operator Puskesmas</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 card-hover fade-up" style="transition-delay:0.1s">
+          <div class="flex items-center gap-1 mb-3">
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+          </div>
+          <p class="text-gray-600 text-sm leading-relaxed mb-5">"Errornya sangat berkurang drastis. Dulu sering ada data yang salah masuk, sekarang hampir tidak pernah. Support-nya juga responsif."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm" style="background:linear-gradient(135deg,#0d9488,#14b8a6);">AR</div>
+            <div>
+              <p class="font-semibold text-sm text-gray-800">Ahmad Ridwan</p>
+              <p class="text-xs text-gray-400">Operator Puskesmas</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 card-hover fade-up" style="transition-delay:0.2s">
+          <div class="flex items-center gap-1 mb-3">
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+            <i class="fas fa-star text-amber-400 text-sm"></i>
+          </div>
+          <p class="text-gray-600 text-sm leading-relaxed mb-5">"Laporan bulanan yang dulu bikin stres sekarang bisa dihasilkan otomatis. Pimpinan pun puas karena datanya selalu rapi dan tepat waktu."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm" style="background:linear-gradient(135deg,#7c3aed,#a855f7);">DM</div>
+            <div>
+              <p class="font-semibold text-sm text-gray-800">Dewi Maharani</p>
+              <p class="text-xs text-gray-400">Operator Puskesmas</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LEGALITAS / SYARAT & KETENTUAN ===== -->
+  <section id="legalitas" class="py-20 bg-section-alt">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12 fade-up">
+        <span class="inline-block bg-red-50 text-red-700 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-4 border border-red-100">Legalitas & Kebijakan</span>
+        <h2 class="text-3xl sm:text-4xl font-black text-gray-900">Syarat, Ketentuan & <span class="text-teal-gradient">Kebijakan Privasi</span></h2>
+        <p class="text-gray-500 mt-4">Transparansi adalah prioritas kami. Baca dengan seksama sebelum menggunakan layanan.</p>
+      </div>
+
+      <!-- Accordion: Syarat & Ketentuan -->
+      <div class="space-y-4">
+        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm fade-up">
+          <button onclick="toggleAccordion('tnc')" class="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-gray-50 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 bg-blue-50 rounded-lg flex items-center justify-center">
+                <i class="fas fa-file-contract text-blue-600"></i>
+              </div>
+              <span class="font-bold text-gray-800">Syarat & Ketentuan Penggunaan</span>
+            </div>
+            <i id="tnc-icon" class="fas fa-chevron-down text-gray-400 transition-transform duration-300"></i>
+          </button>
+          <div id="tnc" class="accordion-content">
+            <div class="px-6 pb-6 text-sm text-gray-600 space-y-3 leading-relaxed">
+              <p><strong class="text-gray-800">1. Definisi Layanan</strong><br/>NextFlow Pro adalah perangkat lunak (software) berbasis bot yang dirancang untuk mengotomasi proses entri data pada sistem informasi kesehatan Puskesmas. Layanan ini disediakan oleh CV. Digital Solusi Nusantara.</p>
+              <p><strong class="text-gray-800">2. Penggunaan yang Diizinkan</strong><br/>Pengguna diizinkan menggunakan layanan ini hanya untuk keperluan operasional Puskesmas yang sah dan sesuai dengan regulasi yang berlaku. Penggunaan untuk tujuan ilegal, penipuan, atau pelanggaran hak pihak ketiga dilarang keras.</p>
+              <p><strong class="text-gray-800">3. Lisensi & Hak Akses</strong><br/>Pembelian paket memberikan lisensi non-eksklusif dan non-transferable kepada pengguna untuk mengakses layanan selama masa aktif berlaku (30 hari). Lisensi tidak dapat dipindahtangankan atau dijual kepada pihak lain.</p>
+              <p><strong class="text-gray-800">4. Batas Penggunaan (Hit Limit)</strong><br/>Setiap paket memiliki batas hits harian: Basic (100 hits/hari) dan Pro (250 hits/hari). Jika batas harian tercapai, entri otomatis akan dihentikan hingga reset pada pukul 00.00 WIB hari berikutnya. Hit limit tidak dapat diakumulasi.</p>
+              <p><strong class="text-gray-800">5. Pembayaran & Refund</strong><br/>Pembayaran bersifat final setelah lisensi diaktifkan. Refund hanya dapat diproses jika layanan tidak dapat diakses sama sekali lebih dari 3x24 jam akibat kesalahan sistem kami. Permintaan refund diajukan melalui email dalam 7 hari sejak aktivasi.</p>
+              <p><strong class="text-gray-800">6. Pembaruan & Perubahan Layanan</strong><br/>Kami berhak melakukan pembaruan sistem, penambahan fitur, atau perubahan kebijakan sewaktu-waktu. Pengguna akan diberitahu melalui email atau notifikasi dalam aplikasi minimal 7 hari sebelum perubahan signifikan berlaku.</p>
+              <p><strong class="text-gray-800">7. Pembatasan Tanggung Jawab</strong><br/>NextFlow Pro tidak bertanggung jawab atas kerugian yang timbul akibat: (a) kegagalan sistem pihak ketiga (server Puskesmas), (b) penggunaan yang tidak sesuai prosedur, (c) force majeure. Tanggung jawab maksimal terbatas pada nilai pembelian paket.</p>
+              <p><strong class="text-gray-800">8. Penghentian Layanan</strong><br/>Kami berhak menghentikan akses pengguna tanpa pemberitahuan jika terbukti melanggar syarat & ketentuan ini. Dalam kasus tersebut, tidak ada refund yang akan diproses.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion: Kebijakan Privasi -->
+        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm fade-up">
+          <button onclick="toggleAccordion('privacy')" class="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-gray-50 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 bg-green-50 rounded-lg flex items-center justify-center">
+                <i class="fas fa-user-shield text-green-600"></i>
+              </div>
+              <span class="font-bold text-gray-800">Kebijakan Privasi</span>
+            </div>
+            <i id="privacy-icon" class="fas fa-chevron-down text-gray-400 transition-transform duration-300"></i>
+          </button>
+          <div id="privacy" class="accordion-content">
+            <div class="px-6 pb-6 text-sm text-gray-600 space-y-3 leading-relaxed">
+              <p><strong class="text-gray-800">1. Data yang Kami Kumpulkan</strong><br/>Kami mengumpulkan: (a) Data identifikasi: nama, email, nomor telepon, nama puskesmas; (b) Data penggunaan: log aktivitas bot, jumlah hits, waktu akses; (c) Data teknis: alamat IP, jenis perangkat, browser. Kami TIDAK menyimpan data pasien yang diinput melalui sistem.</p>
+              <p><strong class="text-gray-800">2. Tujuan Penggunaan Data</strong><br/>Data yang dikumpulkan digunakan untuk: aktivasi dan pengelolaan lisensi, penyediaan layanan teknis, peningkatan kualitas produk, komunikasi mengenai pembaruan layanan, dan pemenuhan kewajiban hukum yang berlaku.</p>
+              <p><strong class="text-gray-800">3. Keamanan Data</strong><br/>Seluruh data disimpan dengan enkripsi AES-256 dan ditransmisikan melalui protokol HTTPS. Kami tidak pernah menjual atau menyewakan data pengguna kepada pihak ketiga untuk tujuan komersial.</p>
+              <p><strong class="text-gray-800">4. Berbagi Data dengan Pihak Ketiga</strong><br/>Data dapat dibagikan hanya kepada: (a) Midtrans untuk pemrosesan pembayaran; (b) penyedia infrastruktur cloud (server); (c) otoritas hukum berdasarkan perintah pengadilan. Semua mitra telah menandatangani perjanjian kerahasiaan.</p>
+              <p><strong class="text-gray-800">5. Hak Pengguna</strong><br/>Pengguna berhak untuk: mengakses data pribadi yang kami simpan, meminta koreksi data yang tidak akurat, meminta penghapusan data (right to be forgotten), dan menarik persetujuan kapan saja. Ajukan permintaan ke email nextflow.auto@gmail.com.</p>
+              <p><strong class="text-gray-800">6. Retensi Data</strong><br/>Data akun aktif disimpan selama masa berlangganan + 1 tahun setelah berakhir. Data log teknis disimpan maksimal 90 hari. Setelah periode tersebut, data dihapus secara permanen dari sistem kami.</p>
+              <p><strong class="text-gray-800">7. Cookie & Pelacakan</strong><br/>Situs web kami menggunakan cookie esensial untuk fungsionalitas dan cookie analitik (anonim) untuk memahami penggunaan situs. Anda dapat menonaktifkan cookie non-esensial melalui pengaturan browser.</p>
+              <p><strong class="text-gray-800">8. Perubahan Kebijakan</strong><br/>Kebijakan privasi ini terakhir diperbarui pada 1 Juli 2025. Perubahan material akan diberitahukan via email kepada pengguna aktif minimal 14 hari sebelum berlaku.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion: Kebijakan Refund -->
+        <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm fade-up">
+          <button onclick="toggleAccordion('refund')" class="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-gray-50 transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 bg-amber-50 rounded-lg flex items-center justify-center">
+                <i class="fas fa-rotate-left text-amber-600"></i>
+              </div>
+              <span class="font-bold text-gray-800">Kebijakan Pengembalian Dana (Refund)</span>
+            </div>
+            <i id="refund-icon" class="fas fa-chevron-down text-gray-400 transition-transform duration-300"></i>
+          </button>
+          <div id="refund" class="accordion-content">
+            <div class="px-6 pb-6 text-sm text-gray-600 space-y-3 leading-relaxed">
+              <p><strong class="text-gray-800">Syarat Refund</strong><br/>Pengembalian dana hanya diproses apabila: (a) Layanan tidak dapat diakses selama lebih dari 72 jam berturut-turut akibat gangguan teknis di sisi kami; (b) Terjadi double payment (pembayaran ganda) yang terkonfirmasi; (c) Pembatalan dalam 24 jam pertama sebelum lisensi diaktifkan.</p>
+              <p><strong class="text-gray-800">Prosedur Pengajuan</strong><br/>1. Kirim email ke nextflow.auto@gmail.com dengan subjek "REFUND - [ID Transaksi]". 2. Sertakan bukti pembayaran dan deskripsi masalah. 3. Tim kami akan merespons dalam 1x24 jam kerja. 4. Jika disetujui, dana dikembalikan ke sumber pembayaran dalam 5-14 hari kerja.</p>
+              <p><strong class="text-gray-800">Hal yang Tidak Dapat Di-refund</strong><br/>Refund tidak berlaku untuk: (a) Ketidakcocokan ekspektasi pengguna dengan fitur yang tersedia; (b) Gangguan akibat jaringan internet pengguna; (c) Lisensi yang sudah aktif lebih dari 24 jam; (d) Pelanggaran syarat & ketentuan.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT SECTION ===== -->
+  <section id="kontak" class="py-20 bg-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12 fade-up">
+        <span class="inline-block bg-teal-50 text-teal-700 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full mb-4 border border-teal-100">Hubungi Kami</span>
+        <h2 class="text-3xl sm:text-4xl font-black text-gray-900">Ada Pertanyaan? <span class="text-teal-gradient">Kami Siap Membantu</span></h2>
+        <p class="text-gray-500 mt-4 max-w-xl mx-auto">Tim kami siap menjawab pertanyaan Anda seputar produk, pembayaran, dan teknis penggunaan.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Contact Info -->
+        <div class="space-y-5 fade-up">
+          <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+            <h3 class="font-bold text-gray-800 mb-5 flex items-center gap-2"><i class="fas fa-address-card text-teal-600"></i> Informasi Kontak</h3>
+            <div class="space-y-4">
+              <div class="flex items-start gap-3">
+                <div class="w-9 h-9 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <i class="fab fa-whatsapp text-green-600"></i>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-400 font-medium">WhatsApp (Utama)</p>
+                  <a href="https://wa.me/6281234899273" class="font-semibold text-gray-800 hover:text-teal-600 transition-colors">+62 812-3489-9273</a>
+                  <p class="text-xs text-gray-400 mt-0.5">Respons dalam 1 jam (07.00–21.00 WIB)</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-9 h-9 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <i class="fas fa-envelope text-blue-600"></i>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-400 font-medium">Email</p>
+                  <a href="mailto:nextflow.auto@gmail.com" class="font-semibold text-gray-800 hover:text-teal-600 transition-colors">nextflow.auto@gmail.com</a>
+                  <p class="text-xs text-gray-400 mt-0.5">Respons dalam 1x24 jam kerja</p>
+                </div>
+              </div>
+              <!-- <div class="flex items-start gap-3">
+                <div class="w-9 h-9 bg-red-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <i class="fas fa-map-marker-alt text-red-500"></i>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-400 font-medium">Alamat Operasional</p>
+                  <p class="font-semibold text-gray-800">CV. Digital Solusi Nusantara</p>
+                  <p class="text-sm text-gray-500">Jl. Sudirman No. 45, Blok B-12<br/>Kel. Kebayoran Baru, Kec. Kebayoran Baru<br/>Jakarta Selatan, DKI Jakarta 12190</p>
+                </div>
+              </div> -->
+              <div class="flex items-start gap-3">
+                <div class="w-9 h-9 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <i class="fas fa-clock text-purple-600"></i>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-400 font-medium">Jam Operasional</p>
+                  <p class="font-semibold text-gray-800">Senin – Jumat: 08.00 – 17.00 WIB</p>
+                  <p class="text-sm text-gray-500">Sabtu: 08.00 – 13.00 WIB</p>
+                  <p class="text-sm text-gray-500">Minggu & Libur Nasional: Tutup</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Legal Identity 
+          <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+            <h3 class="font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fas fa-building text-blue-600"></i> Identitas Legal Perusahaan</h3>
+            <div class="space-y-2 text-sm text-gray-600">
+              <div class="flex justify-between">
+                <span class="text-gray-400">Nama Perusahaan</span>
+                <span class="font-medium text-gray-700">CV. Digital Solusi Nusantara</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Nomor NIB</span>
+                <span class="font-medium text-gray-700">1234567890123</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">NPWP</span>
+                <span class="font-medium text-gray-700">12.345.678.9-012.000</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Kategori Usaha</span>
+                <span class="font-medium text-gray-700">Software & Teknologi</span>
+              </div>
+            </div>
+          </div>
+          -->
+        </div>
+
+        <!-- Contact Form -->
+        <div class="fade-up" style="transition-delay:0.1s">
+          <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 h-full">
+            <h3 class="font-bold text-gray-800 mb-5 flex items-center gap-2"><i class="fas fa-paper-plane text-teal-600"></i> Kirim Pesan</h3>
+            <form onsubmit="handleFormSubmit(event)" class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Nama Lengkap *</label>
+                <input type="text" required placeholder="Masukkan nama Anda"
+                  class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-50 bg-white transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Email *</label>
+                <input type="email" required placeholder="nama@email.com"
+                  class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-50 bg-white transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Nama Puskesmas</label>
+                <input type="text" placeholder="Contoh: Puskesmas Cempaka"
+                  class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-50 bg-white transition-all" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Pesan / Pertanyaan *</label>
+                <textarea required rows="4" placeholder="Tulis pertanyaan atau kebutuhan Anda di sini..."
+                  class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-50 bg-white transition-all resize-none"></textarea>
+              </div>
+              <button type="submit" class="btn-teal w-full text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2">
+                <i class="fas fa-paper-plane"></i> Kirim Pesan
+              </button>
+            </form>
+            <div id="form-success" class="hidden mt-4 bg-green-50 border border-green-100 rounded-xl p-4 text-center">
+              <i class="fas fa-check-circle text-green-500 text-2xl mb-2"></i>
+              <p class="text-green-700 font-semibold text-sm">Pesan terkirim! Kami akan membalas segera.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA BANNER ===== -->
+  <section class="py-16 bg-hero relative overflow-hidden">
+    <div class="hero-glow" style="width:300px;height:300px;background:#14b8a6;top:-80px;right:-60px;"></div>
+    <div class="hero-glow" style="width:200px;height:200px;background:#d4a847;bottom:-60px;left:10%;"></div>
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center relative z-10">
+      <p class="text-white/60 text-sm font-medium uppercase tracking-widest mb-4">Siap Memulai?</p>
+      <h2 class="text-3xl sm:text-4xl font-black text-white mb-4">Hemat Waktu, Tingkatkan Akurasi. <span class="text-gold-gradient">Mulai Hari Ini.</span></h2>
+      <p class="text-white/70 mb-8 max-w-xl mx-auto">Bergabunglah bersama kami dan rasakan manfaat NextFlow Pro.</p>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="#harga" class="btn-cta font-bold px-8 py-4 rounded-full flex items-center gap-2" style="color:#0f2557;">
+          <i class="fas fa-tags"></i> Pilih Paket Sekarang
+        </a>
+        <a href="https://wa.me/6281234899273" target="_blank" class="border border-white/30 text-white hover:bg-white/10 transition-colors font-semibold px-8 py-4 rounded-full flex items-center gap-2">
+          <i class="fab fa-whatsapp"></i> Konsultasi Gratis
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="py-12 bg-gray-950">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <!-- Brand -->
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:linear-gradient(135deg,#d4a847,#f0c85a);">
+              <i class="fas fa-bolt text-white text-sm"></i>
+            </div>
+            <span class="font-bold text-lg text-white">NextFlow <span class="text-gold-gradient">Pro</span></span>
+          </div>
+          <p class="text-gray-400 text-sm leading-relaxed max-w-xs mb-4">Solusi otomasi entri data terpercaya untuk operator puskesmas di seluruh Indonesia. Lebih cepat, lebih akurat, lebih profesional.</p>
+          <p class="text-gray-500 text-xs">Ditenagai oleh teknologi AI & Bot Automation terkini.</p>
+        </div>
+        <!-- Links -->
+        <div>
+          <p class="font-semibold text-white text-sm mb-4">Navigasi</p>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#fitur" class="hover:text-white transition-colors">Fitur Utama</a></li>
+            <li><a href="#harga" class="hover:text-white transition-colors">Harga & Paket</a></li>
+            <li><a href="#cara-kerja" class="hover:text-white transition-colors">Cara Kerja</a></li>
+            <li><a href="#legalitas" class="hover:text-white transition-colors">Syarat & Ketentuan</a></li>
+            <li><a href="#legalitas" class="hover:text-white transition-colors">Kebijakan Privasi</a></li>
+            <li><a href="#kontak" class="hover:text-white transition-colors">Hubungi Kami</a></li>
+          </ul>
+        </div>
+        <!-- Contact -->
+        <div>
+          <p class="font-semibold text-white text-sm mb-4">Kontak</p>
+          <ul class="space-y-3 text-sm text-gray-400">
+            <li class="flex items-start gap-2">
+              <i class="fab fa-whatsapp text-green-400 mt-0.5"></i>
+              <span>+62 812-3489-9273</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="fas fa-envelope text-blue-400 mt-0.5"></i>
+              <span>nextflow.auto@gmail.com</span>
+            </li>
+            <!-- <li class="flex items-start gap-2">
+              <i class="fas fa-map-marker-alt text-red-400 mt-0.5"></i>
+              <span>Jl. Sudirman No. 45, Jakarta Selatan 12190</span>
+            </li> -->
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-gray-500 text-xs text-center sm:text-left">© 2025 Copyright NextFlow Pro. Hak Cipta Dilindungi Undang-Undang.</p>
+        <div class="flex items-center gap-4">
+          <span class="text-gray-600 text-xs flex items-center gap-1"><i class="fas fa-shield-halved text-teal-500"></i> SSL Secured</span>
+          <span class="text-gray-600 text-xs flex items-center gap-1"><i class="fas fa-lock text-amber-500"></i> Midtrans Verified</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    // ---- Navbar scroll effect ----
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        navbar.classList.add('nav-blur', 'shadow-lg');
+        navbar.style.background = 'rgba(15,37,87,0.95)';
+      } else {
+        navbar.classList.remove('shadow-lg');
+        navbar.style.background = 'transparent';
+      }
+    });
+
+    // ---- Mobile Menu ----
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+    let menuOpen = false;
+
+    hamburger.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileMenu.classList.toggle('open', menuOpen);
+      hamburgerIcon.className = menuOpen ? 'fas fa-times' : 'fas fa-bars';
+    });
+
+    function closeMobileMenu() {
+      menuOpen = false;
+      mobileMenu.classList.remove('open');
+      hamburgerIcon.className = 'fas fa-bars';
+    }
+
+    // ---- Accordion ----
+    function toggleAccordion(id) {
+      const content = document.getElementById(id);
+      const icon = document.getElementById(id + '-icon');
+      const isOpen = content.classList.contains('open');
+
+      // Close all
+      document.querySelectorAll('.accordion-content').forEach(el => el.classList.remove('open'));
+      document.querySelectorAll('[id$="-icon"]').forEach(el => {
+        el.style.transform = 'rotate(0deg)';
+      });
+
+      if (!isOpen) {
+        content.classList.add('open');
+        icon.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    // ---- Intersection Observer for fade-up ----
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // ---- Form Submit ----
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      form.style.opacity = '0.5';
+      form.style.pointerEvents = 'none';
+      setTimeout(() => {
+        form.reset();
+        form.style.opacity = '1';
+        form.style.pointerEvents = 'auto';
+        document.getElementById('form-success').classList.remove('hidden');
+        setTimeout(() => {
+          document.getElementById('form-success').classList.add('hidden');
+        }, 5000);
+      }, 1200);
+    }
+
+    // ---- Smooth active nav highlight ----
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(sec => {
+        const sectionTop = sec.offsetTop - 100;
+        if (window.scrollY >= sectionTop) current = sec.getAttribute('id');
+      });
+      navLinks.forEach(link => {
+        link.classList.remove('text-white');
+        link.classList.add('text-white/80');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('text-white');
+          link.classList.remove('text-white/80');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

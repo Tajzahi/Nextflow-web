@@ -146,7 +146,7 @@
       transition: max-height 0.4s ease, padding 0.3s ease;
     }
     .accordion-content.open {
-      max-height: 600px;
+      max-height: 2000px;
     }
 
     /* Mobile Menu */
@@ -247,9 +247,9 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="flex items-center justify-between h-16">
         <!-- Logo -->
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-3 pointer-events-none">
           <img src="assets/branding/logo_only.png" alt="NF Icon" class="h-20 w-auto relative top-1.5">
-          <span class="font-black text-2xl text-white tracking-tight">NextFlow <span class="text-gold-gradient">Pro</span></span>
+          <img src="assets/branding/text_only.png" alt="NextFlow Pro" class="h-90 w-auto -ml-18 relative top-1.5">
         </div>
         <!-- Desktop Nav -->
         <div class="hidden md:flex items-center gap-6 text-sm font-medium">
@@ -470,7 +470,7 @@
           <h3 class="text-xl font-bold text-gray-900 mb-3">Laporan Profesional</h3>
           <p class="text-gray-500 leading-relaxed mb-5">Generate laporan harian, mingguan, dan bulanan secara otomatis dalam format yang siap diserahkan kepada Operator Kesehatan.</p>
           <ul class="space-y-2 text-sm text-gray-600">
-            <li class="check-item">Export ke Excel & PDF otomatis</li>
+            <li class="check-item">Export ke Excel otomatis</li>
             <li class="check-item">Rekap data statistik kunjungan</li>
             <li class="check-item">Dashboard monitoring real-time</li>
           </ul>
@@ -1064,11 +1064,11 @@
       <div class="grid md:grid-cols-4 gap-8 mb-8">
         <!-- Brand -->
         <div class="md:col-span-2">
-          <div class="flex items-center gap-3 mb-6">
-            <img src="assets/branding/logo_only.png" alt="NF Icon" class="h-16 w-auto relative top-1">
-            <span class="font-black text-3xl text-white tracking-tight">NextFlow <span class="text-gold-gradient">Pro</span></span>
+          <div class="flex items-center gap-3 mb-3 -mt-40 pointer-events-none">
+            <img src="assets/branding/logo_only.png" alt="NF Icon" class="h-20 w-auto relative top-1">
+            <img src="assets/branding/text_only.png" alt="NextFlow Pro" class="h-90 w-auto -ml-18 relative top-1">
           </div>
-          <p class="text-gray-400 text-sm leading-relaxed max-w-xs mb-4">Solusi otomasi entri data terpercaya untuk operator puskesmas di seluruh Indonesia. Lebih cepat, lebih akurat, lebih profesional.</p>
+          <p class="text-gray-400 text-sm leading-relaxed max-w-xs mb-4 -mt-36">Solusi otomasi entri data terpercaya untuk operator puskesmas di seluruh Indonesia. Lebih cepat, lebih akurat, lebih profesional.</p>
           <p class="text-gray-500 text-xs">Ditenagai oleh teknologi AI & Bot Automation terkini.</p>
         </div>
         <!-- Links -->
@@ -1089,11 +1089,11 @@
           <ul class="space-y-3 text-sm text-gray-400">
             <li class="flex items-start gap-2">
               <i class="fab fa-whatsapp text-green-400 mt-0.5"></i>
-              <span>+62 812-3489-9273</span>
+              <span><a href="https://wa.me/6281234899273" target="_blank" class="hover:text-white transition-colors">WhatsApp</a></span>
             </li>
             <li class="flex items-start gap-2">
               <i class="fas fa-envelope text-blue-400 mt-0.5"></i>
-              <span>nextflow.auto@gmail.com</span>
+              <span><a href="mailto:nextflow.auto@gmail.com" class="hover:text-white transition-colors">nextflow.auto@gmail.com</a></span>
             </li>
             <!-- <li class="flex items-start gap-2">
               <i class="fas fa-map-marker-alt text-red-400 mt-0.5"></i>
@@ -1120,7 +1120,7 @@
     window.addEventListener('scroll', () => {
       if (window.scrollY > 60) {
         navbar.classList.add('nav-blur', 'shadow-lg');
-        navbar.style.background = 'rgba(15,37,87,0.95)';
+        navbar.style.background = 'rgba(19, 78, 122, 0.95)';
       } else {
         navbar.classList.remove('shadow-lg');
         navbar.style.background = 'transparent';

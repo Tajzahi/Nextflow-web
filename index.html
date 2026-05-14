@@ -260,7 +260,16 @@
           <a href="#harga" class="text-white/80 hover:text-white transition-colors">Harga</a>
           <a href="#cara-kerja" class="text-white/80 hover:text-white transition-colors">Cara Kerja</a>
           <a href="#kontak" class="text-white/80 hover:text-white transition-colors">Kontak</a>
-          <a href="#harga" class="btn-cta text-navy px-5 py-2 rounded-full text-sm font-bold" style="color:#0f2557;">Mulai Sekarang</a>
+          <div id="navUserArea" class="flex items-center gap-3">
+            <button onclick="bukaModal()"
+              class="border border-white/30 text-white/80 hover:text-white hover:bg-white/10
+                     transition-all font-medium px-4 py-2 rounded-full text-sm cursor-pointer">
+              <i class="fas fa-arrow-right-to-bracket mr-1.5"></i>Masuk
+            </button>
+            <a href="#harga" class="btn-cta text-navy px-5 py-2 rounded-full text-sm font-bold" style="color:#0f2557;">
+              Mulai Sekarang
+            </a>
+          </div>
         </div>
         <!-- Hamburger -->
         <button id="hamburger" class="md:hidden text-white text-xl focus:outline-none">
@@ -274,7 +283,16 @@
           <a href="#harga" class="block text-white/80 hover:text-white py-1" onclick="closeMobileMenu()">Harga</a>
           <a href="#cara-kerja" class="block text-white/80 hover:text-white py-1" onclick="closeMobileMenu()">Cara Kerja</a>
           <a href="#kontak" class="block text-white/80 hover:text-white py-1" onclick="closeMobileMenu()">Kontak</a>
-          <a href="#harga" class="btn-cta block text-center font-bold py-2 rounded-full text-sm" style="color:#0f2557;" onclick="closeMobileMenu()">Mulai Sekarang</a>
+          <div id="navUserAreaMobile" class="pt-2 border-t border-white/10 space-y-1">
+            <button onclick="bukaModal(); closeMobileMenu();"
+              class="block text-white/80 hover:text-white py-1 text-left w-full cursor-pointer">
+              <i class="fas fa-arrow-right-to-bracket mr-1.5 text-xs"></i>Masuk
+            </button>
+            <a href="#harga" class="btn-cta block text-center font-bold py-2 rounded-full text-sm" 
+               style="color:#0f2557;" onclick="closeMobileMenu()">
+              Mulai Sekarang
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -615,7 +633,7 @@
               <span class="text-gray-700 text-sm">Support <strong>Prioritas WhatsApp</strong></span>
             </li>
           </ul>
-          <a href="https://wa.me/6281234899273?text=Saya%20ingin%20mencoba%20Paket%20Free%20NextFlow%20Pro" target="_blank"
+          <a href="javascript:void(0)" onclick="klaimFreeTrial()"
              class="block text-center border-2 border-gray-300 font-bold py-3.5 rounded-xl transition-all hover:border-gray-500 hover:text-gray-700 text-gray-500">
             Coba Gratis
           </a>
@@ -1216,117 +1234,563 @@
       });
     });
   </script>
+  <!-- ===== AUTH MODAL ===== -->
   <div id="authModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 px-4">
-    <div class="bg-slate-800 border border-slate-700 w-full max-w-md p-8 rounded-2xl shadow-2xl text-left">
-      <h3 id="modalTitle" class="text-2xl font-bold text-white">Login Akun</h3>
-      <p class="text-sm text-slate-400 mt-1">Silakan login untuk menyimpan lisensi Anda.</p>
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-md rounded-2xl shadow-2xl text-left overflow-hidden">
 
-      <div id="authError" class="hidden mt-4 p-3 bg-red-900/50 border border-red-500 rounded text-sm text-red-200"></div>
-
-      <form id="authForm" onsubmit="handleAuth(event)" class="mt-6 space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-slate-300">Email</label>
-          <input type="email" id="emailInput" required class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-indigo-500 focus:outline-none" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-slate-300">Password</label>
-          <input type="password" id="passwordInput" required class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-indigo-500 focus:outline-none" />
+      <!-- Header -->
+      <div class="px-8 pt-8 pb-0">
+        <div class="flex items-center justify-between mb-2">
+          <img src="assets/logo_only.png" alt="Logo" class="h-10 w-auto">
+          <button onclick="tutupModal()" class="text-slate-400 hover:text-white transition-colors">
+            <i class="fas fa-times text-lg"></i>
+          </button>
         </div>
 
-        <button type="submit" id="submitBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 p-3 rounded-lg font-bold text-white transition">
-          Masuk / Lanjutkan
-        </button>
-      </form>
+        <!-- Tabs -->
+        <div class="flex border-b border-slate-700 mt-4">
+          <button id="tabLogin" onclick="switchTab('login')"
+            class="flex-1 py-3 text-sm font-bold transition-colors border-b-2 border-indigo-500 text-indigo-400">
+            Masuk
+          </button>
+          <button id="tabDaftar" onclick="switchTab('daftar')"
+            class="flex-1 py-3 text-sm font-bold transition-colors border-b-2 border-transparent text-slate-400 hover:text-white">
+            Daftar Akun
+          </button>
+        </div>
+      </div>
 
-      <button onclick="tutupModal()" class="mt-8 w-full text-xs text-slate-500 hover:text-slate-300 text-center uppercase tracking-widest">Batal</button>
+      <!-- Error Box -->
+      <div id="authError" class="hidden mx-8 mt-4 p-3 bg-red-900/50 border border-red-500/50 rounded-lg text-sm text-red-300 flex items-start gap-2">
+        <i class="fas fa-circle-exclamation mt-0.5 flex-shrink-0"></i>
+        <span id="authErrorMsg"></span>
+      </div>
+
+      <!-- Success Box -->
+      <div id="authSuccess" class="hidden mx-8 mt-4 p-3 bg-green-900/50 border border-green-500/50 rounded-lg text-sm text-green-300 flex items-start gap-2">
+        <i class="fas fa-circle-check mt-0.5 flex-shrink-0"></i>
+        <span id="authSuccessMsg"></span>
+      </div>
+
+      <!-- Form Login -->
+      <div id="formLogin" class="px-8 pb-8 pt-6">
+        <form onsubmit="handleLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Email</label>
+            <input type="email" id="loginEmail" required autocomplete="email"
+              placeholder="nama@email.com"
+              class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm
+                     focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none
+                     transition-all placeholder-slate-500" />
+          </div>
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Password</label>
+              <button type="button" onclick="switchTab('lupa')"
+                class="text-xs text-indigo-400 hover:text-indigo-300 transition-colors">
+                Lupa password?
+              </button>
+            </div>
+            <div class="relative">
+              <input type="password" id="loginPassword" required autocomplete="current-password"
+                placeholder="Masukkan password"
+                class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 pr-12 text-white text-sm
+                       focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none
+                       transition-all placeholder-slate-500" />
+              <button type="button" onclick="togglePassword('loginPassword', 'eyeLogin')"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors">
+                <i id="eyeLogin" class="fas fa-eye text-sm"></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" id="loginBtn"
+            class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed
+                   p-3 rounded-xl font-bold text-white transition-all flex items-center justify-center gap-2">
+            <i class="fas fa-arrow-right-to-bracket"></i>
+            <span id="loginBtnText">Masuk</span>
+          </button>
+        </form>
+        <p class="text-center text-xs text-slate-500 mt-5">
+          Belum punya akun?
+          <button onclick="switchTab('daftar')" class="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors">
+            Daftar sekarang
+          </button>
+        </p>
+      </div>
+
+      <!-- Form Daftar -->
+      <div id="formDaftar" class="hidden px-8 pb-8 pt-6">
+        <form onsubmit="handleDaftar(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Email</label>
+            <input type="email" id="daftarEmail" required autocomplete="email"
+              placeholder="nama@email.com"
+              class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm
+                     focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none
+                     transition-all placeholder-slate-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Password</label>
+            <div class="relative">
+              <input type="password" id="daftarPassword" required autocomplete="new-password"
+                placeholder="Minimal 8 karakter"
+                minlength="8"
+                class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 pr-12 text-white text-sm
+                       focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none
+                       transition-all placeholder-slate-500" />
+              <button type="button" onclick="togglePassword('daftarPassword', 'eyeDaftar')"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors">
+                <i id="eyeDaftar" class="fas fa-eye text-sm"></i>
+              </button>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Konfirmasi Password</label>
+            <div class="relative">
+              <input type="password" id="daftarPasswordConfirm" required autocomplete="new-password"
+                placeholder="Ulangi password"
+                class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 pr-12 text-white text-sm
+                       focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none
+                       transition-all placeholder-slate-500" />
+              <button type="button" onclick="togglePassword('daftarPasswordConfirm', 'eyeConfirm')"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors">
+                <i id="eyeConfirm" class="fas fa-eye text-sm"></i>
+              </button>
+            </div>
+          </div>
+          <!-- Password strength -->
+          <div id="passwordStrength" class="hidden">
+            <div class="flex gap-1 mb-1">
+              <div id="str1" class="h-1 flex-1 rounded bg-slate-700 transition-colors"></div>
+              <div id="str2" class="h-1 flex-1 rounded bg-slate-700 transition-colors"></div>
+              <div id="str3" class="h-1 flex-1 rounded bg-slate-700 transition-colors"></div>
+              <div id="str4" class="h-1 flex-1 rounded bg-slate-700 transition-colors"></div>
+            </div>
+            <p id="strengthText" class="text-xs text-slate-500"></p>
+          </div>
+          <button type="submit" id="daftarBtn"
+            class="w-full bg-teal-600 hover:bg-teal-700 disabled:opacity-60 disabled:cursor-not-allowed
+                   p-3 rounded-xl font-bold text-white transition-all flex items-center justify-center gap-2">
+            <i class="fas fa-user-plus"></i>
+            <span id="daftarBtnText">Buat Akun</span>
+          </button>
+        </form>
+        <p class="text-center text-xs text-slate-500 mt-5">
+          Sudah punya akun?
+          <button onclick="switchTab('login')" class="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors">
+            Masuk di sini
+          </button>
+        </p>
+      </div>
+
+      <!-- Form Lupa Password -->
+      <div id="formLupa" class="hidden px-8 pb-8 pt-6">
+        <div class="text-center mb-6">
+          <div class="w-14 h-14 bg-indigo-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
+            <i class="fas fa-key text-indigo-400 text-xl"></i>
+          </div>
+          <h4 class="text-white font-bold">Lupa Password?</h4>
+          <p class="text-slate-400 text-xs mt-1">Masukkan email Anda, kami akan kirim link reset password.</p>
+        </div>
+        <form onsubmit="handleLupaPassword(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Email Terdaftar</label>
+            <input type="email" id="lupaEmail" required
+              placeholder="nama@email.com"
+              class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm
+                     focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none
+                     transition-all placeholder-slate-500" />
+          </div>
+          <button type="submit" id="lupaBtn"
+            class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed
+                   p-3 rounded-xl font-bold text-white transition-all flex items-center justify-center gap-2">
+            <i class="fas fa-paper-plane"></i>
+            <span id="lupaBtnText">Kirim Link Reset</span>
+          </button>
+        </form>
+        <p class="text-center text-xs text-slate-500 mt-5">
+          <button onclick="switchTab('login')" class="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors">
+            <i class="fas fa-arrow-left text-xs"></i> Kembali ke Login
+          </button>
+        </p>
+      </div>
+
     </div>
   </div>
 
+
+  <!-- ===== JAVASCRIPT UTAMA ===== -->
   <script>
-    // 1. Inisialisasi Supabase
-    const supabaseUrl = 'https://bwnwjdvmjihrymtwqgqb.supabase.co';
-    const supabasePublishableKey = 'sb_publishable_CcOtzzFTtjlbZBUOSd0UZA_zqnNWNAM';
-    const supabaseClient = supabase.createClient(supabaseUrl, supabasePublishableKey);
+    // ============================================================
+    // KONFIGURASI
+    // ============================================================
+    const SUPABASE_URL  = 'https://bwnwjdvmjihrymtwqgqb.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3bndqZHZtamlocnltdHdxZ3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1MTA2OTYsImV4cCI6MjA2MjA4NjY5Nn0.f7rOlwN6dPRCJbzq_tnD7-jGfcGJ0prEInQaVQcRBWw';
+
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
     let activeUser = null;
     let selectedTier = '';
 
-    // 2. Cek apakah user sudah login saat web dibuka
+    // ============================================================
+    // SESSION MANAGEMENT
+    // ============================================================
+
     async function checkSession() {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      activeUser = session ? session.user : null;
-      if (activeUser) {
-        console.log("User login sebagai:", activeUser.email);
-      }
+      const { data: { session } } = await sb.auth.getSession();
+      activeUser = session?.user ?? null;
+      updateNavbar();
     }
     checkSession();
 
-    // 3. Fungsi saat tombol "Beli Paket" diklik
-    function pilihPaket(tier) {
-      selectedTier = tier;
-      if (!activeUser) {
-        // Jika belum login, buka modal login
-        document.getElementById('authModal').classList.remove('hidden');
+    // Listen untuk perubahan auth state
+    sb.auth.onAuthStateChange((_event, session) => {
+      activeUser = session?.user ?? null;
+      updateNavbar();
+    });
+
+    // ============================================================
+    // NAVBAR DINAMIS
+    // ============================================================
+
+    function updateNavbar() {
+      const navDesktop = document.getElementById('navUserArea');
+      const navMobile  = document.getElementById('navUserAreaMobile');
+
+      if (!navDesktop || !navMobile) return;
+
+      if (activeUser) {
+        const email    = activeUser.email ?? '';
+        const initial  = email.charAt(0).toUpperCase();
+        const shortEmail = email.length > 20 ? email.substring(0, 18) + '…' : email;
+
+        navDesktop.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="text-white/60 text-xs hidden lg:block">${shortEmail}</span>
+            <button onclick="handleLogout()"
+              class="text-white/80 hover:text-red-400 transition-all text-sm font-medium flex items-center gap-2">
+              <i class="fas fa-arrow-right-from-bracket text-xs"></i> Logout
+            </button>
+          </div>
+        `;
+
+        navMobile.innerHTML = `
+          <div class="py-2 border-t border-white/10 mt-2">
+            <p class="text-white/40 text-[10px] uppercase tracking-widest mb-2">Akun Saya</p>
+            <p class="text-white text-sm font-medium mb-3">${email}</p>
+            <button onclick="handleLogout(); closeMobileMenu();"
+              class="block w-full text-left text-red-400 hover:text-red-300 py-1 text-sm">
+              <i class="fas fa-arrow-right-from-bracket text-xs mr-1"></i> Logout
+            </button>
+          </div>
+        `;
       } else {
-        // Jika sudah login, langsung proses ke Midtrans
-        prosesCheckout();
+        navDesktop.innerHTML = `
+          <button onclick="bukaModal()"
+            class="border border-white/30 text-white/80 hover:text-white hover:bg-white/10
+                   transition-all font-medium px-4 py-2 rounded-full text-sm">
+            <i class="fas fa-arrow-right-to-bracket mr-1.5"></i>Masuk
+          </button>
+          <a href="#harga" class="btn-cta font-bold px-5 py-2 rounded-full text-sm" style="color:#0f2557;">
+            Mulai Sekarang
+          </a>
+        `;
+
+        navMobile.innerHTML = `
+          <button onclick="bukaModal(); closeMobileMenu();"
+            class="block text-white/80 hover:text-white py-1 text-left">
+            <i class="fas fa-arrow-right-to-bracket mr-1.5 text-xs"></i>Masuk
+          </button>
+          <a href="#harga" class="btn-cta block text-center font-bold py-2 rounded-full text-sm"
+             style="color:#0f2557;" onclick="closeMobileMenu()">Mulai Sekarang</a>
+        `;
       }
+    }
+
+    // ============================================================
+    // MODAL AUTH
+    // ============================================================
+
+    function bukaModal(tab) {
+      document.getElementById('authModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      clearAuthMessages();
+      switchTab(tab || 'login');
     }
 
     function tutupModal() {
       document.getElementById('authModal').classList.add('hidden');
+      document.body.style.overflow = '';
     }
 
-    // 4. Fungsi Login / Register otomatis via Supabase Auth
-    async function handleAuth(e) {
-      e.preventDefault();
-      const email = document.getElementById('emailInput').value;
-      const password = document.getElementById('passwordInput').value;
-      const btn = document.getElementById('submitBtn');
-      const errBox = document.getElementById('authError');
+    function switchTab(tab) {
+      const tabs   = { login: 'tabLogin', daftar: 'tabDaftar' };
+      const forms  = { login: 'formLogin', daftar: 'formDaftar', lupa: 'formLupa' };
 
-      btn.innerText = "Memproses...";
-      errBox.classList.add('hidden');
+      // Reset tab styles
+      document.getElementById('tabLogin').className =
+        'flex-1 py-3 text-sm font-bold transition-colors border-b-2 border-transparent text-slate-400 hover:text-white';
+      document.getElementById('tabDaftar').className =
+        'flex-1 py-3 text-sm font-bold transition-colors border-b-2 border-transparent text-slate-400 hover:text-white';
 
-      try {
-        // Coba login dulu
-        let { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      // Active tab
+      if (tab === 'login') {
+        document.getElementById('tabLogin').className =
+          'flex-1 py-3 text-sm font-bold transition-colors border-b-2 border-indigo-500 text-indigo-400';
+      } else if (tab === 'daftar') {
+        document.getElementById('tabDaftar').className =
+          'flex-1 py-3 text-sm font-bold transition-colors border-b-2 border-teal-500 text-teal-400';
+      }
 
-        // Jika akun belum ada (error), otomatis buatkan akun baru (Register)
-        if (error && (error.message.includes("Invalid login") || error.message.includes("Email not confirmed"))) {
-          const res = await supabaseClient.auth.signUp({ email, password });
-          data = res.data;
-          error = res.error;
-          if (!error) alert("Akun baru berhasil dibuat!");
-        }
+      // Show/hide forms
+      document.getElementById('formLogin').classList.toggle('hidden', tab !== 'login');
+      document.getElementById('formDaftar').classList.toggle('hidden', tab !== 'daftar');
+      document.getElementById('formLupa').classList.toggle('hidden', tab !== 'lupa');
 
-        if (error) throw error;
+      // Tab buttons visibilty untuk form lupa
+      document.getElementById('tabLogin').parentElement.classList.toggle('hidden', tab === 'lupa');
 
-        activeUser = data.user;
-        tutupModal();
+      clearAuthMessages();
+    }
 
-        // Lanjutkan proses beli karena user sudah berhasil login
-        prosesCheckout();
+    function showAuthError(msg) {
+      const box = document.getElementById('authError');
+      document.getElementById('authErrorMsg').innerText = msg;
+      box.classList.remove('hidden');
+      document.getElementById('authSuccess').classList.add('hidden');
+    }
 
-      } catch (err) {
-        errBox.innerText = err.message;
-        errBox.classList.remove('hidden');
-      } finally {
-        btn.innerText = "Masuk / Lanjutkan";
+    function showAuthSuccess(msg) {
+      const box = document.getElementById('authSuccess');
+      document.getElementById('authSuccessMsg').innerText = msg;
+      box.classList.remove('hidden');
+      document.getElementById('authError').classList.add('hidden');
+    }
+
+    function clearAuthMessages() {
+      document.getElementById('authError').classList.add('hidden');
+      document.getElementById('authSuccess').classList.add('hidden');
+    }
+
+    function togglePassword(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon  = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fas fa-eye-slash text-sm';
+      } else {
+        input.type = 'password';
+        icon.className = 'fas fa-eye text-sm';
       }
     }
 
-    // 5. Menghubungi Edge Function & Midtrans Snap
+    // Password strength meter
+    document.getElementById('daftarPassword')?.addEventListener('input', function() {
+      const val = this.value;
+      const bar = document.getElementById('passwordStrength');
+      const txt = document.getElementById('strengthText');
+
+      if (val.length === 0) {
+        bar.classList.add('hidden');
+        return;
+      }
+
+      bar.classList.remove('hidden');
+
+      let score = 0;
+      if (val.length >= 8)  score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      const colors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-teal-500'];
+      const labels = ['Sangat Lemah', 'Lemah', 'Cukup', 'Kuat'];
+
+      for (let i = 1; i <= 4; i++) {
+        const el = document.getElementById('str' + i);
+        el.className = 'h-1 flex-1 rounded transition-colors ' +
+          (i <= score ? colors[score - 1] : 'bg-slate-700');
+      }
+
+      txt.innerText = labels[score - 1] || '';
+      txt.className = 'text-xs ' + (score <= 1 ? 'text-red-400' : score === 2 ? 'text-orange-400' : score === 3 ? 'text-yellow-400' : 'text-teal-400');
+    });
+
+    // ============================================================
+    // HANDLER LOGIN
+    // ============================================================
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email    = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const btn      = document.getElementById('loginBtn');
+      const btnTxt   = document.getElementById('loginBtnText');
+
+      btn.disabled = true;
+      btnTxt.innerText = 'Memproses...';
+      clearAuthMessages();
+
+      const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        let msg = 'Login gagal. Periksa email dan password Anda.';
+        if (error.message.includes('Email not confirmed')) {
+          msg = 'Email belum dikonfirmasi. Cek inbox Anda dan klik link konfirmasi.';
+        } else if (error.message.includes('Invalid login')) {
+          msg = 'Email atau password salah.';
+        }
+        showAuthError(msg);
+        btn.disabled = false;
+        btnTxt.innerText = 'Masuk';
+        return;
+      }
+
+      activeUser = data.user;
+      tutupModal();
+
+      if (selectedTier) {
+        prosesCheckout();
+      }
+
+      btn.disabled = false;
+      btnTxt.innerText = 'Masuk';
+    }
+
+    // ============================================================
+    // HANDLER DAFTAR
+    // ============================================================
+
+    async function handleDaftar(e) {
+      e.preventDefault();
+      const email    = document.getElementById('daftarEmail').value.trim();
+      const password = document.getElementById('daftarPassword').value;
+      const confirm  = document.getElementById('daftarPasswordConfirm').value;
+      const btn      = document.getElementById('daftarBtn');
+      const btnTxt   = document.getElementById('daftarBtnText');
+
+      clearAuthMessages();
+
+      if (password !== confirm) {
+        showAuthError('Password dan konfirmasi password tidak sama.');
+        return;
+      }
+
+      if (password.length < 8) {
+        showAuthError('Password minimal 8 karakter.');
+        return;
+      }
+
+      btn.disabled = true;
+      btnTxt.innerText = 'Membuat akun...';
+
+      const { data, error } = await sb.auth.signUp({ email, password });
+
+      if (error) {
+        let msg = 'Gagal membuat akun.';
+        if (error.message.includes('already registered')) {
+          msg = 'Email ini sudah terdaftar. Silakan login.';
+        } else if (error.message.includes('password')) {
+          msg = 'Password terlalu lemah. Gunakan kombinasi huruf, angka, dan simbol.';
+        } else {
+          msg = error.message;
+        }
+        showAuthError(msg);
+        btn.disabled = false;
+        btnTxt.innerText = 'Buat Akun';
+        return;
+      }
+
+      // Cek apakah butuh konfirmasi email
+      if (data.user && !data.session) {
+        showAuthSuccess('Akun berhasil dibuat! Cek email Anda untuk konfirmasi, lalu login.');
+        btn.disabled = false;
+        btnTxt.innerText = 'Buat Akun';
+        return;
+      }
+
+      // Jika langsung berhasil (email confirmation disabled di Supabase)
+      if (data.session) {
+        activeUser = data.user;
+        tutupModal();
+        if (selectedTier) prosesCheckout();
+      }
+
+      btn.disabled = false;
+      btnTxt.innerText = 'Buat Akun';
+    }
+
+    // ============================================================
+    // HANDLER LUPA PASSWORD
+    // ============================================================
+
+    async function handleLupaPassword(e) {
+      e.preventDefault();
+      const email  = document.getElementById('lupaEmail').value.trim();
+      const btn    = document.getElementById('lupaBtn');
+      const btnTxt = document.getElementById('lupaBtnText');
+
+      clearAuthMessages();
+      btn.disabled = true;
+      btnTxt.innerText = 'Mengirim...';
+
+      const { error } = await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + window.location.pathname + '?reset=true',
+      });
+
+      if (error) {
+        showAuthError('Gagal mengirim email reset. Pastikan email Anda terdaftar.');
+      } else {
+        showAuthSuccess('Link reset password telah dikirim ke ' + email + '. Cek inbox Anda.');
+      }
+
+      btn.disabled = false;
+      btnTxt.innerText = 'Kirim Link Reset';
+    }
+
+    // ============================================================
+    // HANDLER LOGOUT
+    // ============================================================
+
+    async function handleLogout() {
+      await sb.auth.signOut();
+      activeUser = null;
+      tutupDashboard();
+      updateNavbar();
+    }
+
+
+    // ============================================================
+    // PILIH PAKET & CHECKOUT
+    // ============================================================
+
+    function pilihPaket(tier) {
+      selectedTier = tier;
+      if (!activeUser) {
+        bukaModal('login');
+      } else {
+        prosesCheckout();
+      }
+    }
+
     async function prosesCheckout() {
       if (!activeUser || !selectedTier) return;
 
-      alert(`Memproses tagihan untuk paket ${selectedTier}... Mohon tunggu.`);
-
       try {
-        const { data: { session } } = await supabaseClient.auth.getSession();
+        const { data: { session } } = await sb.auth.getSession();
+        if (!session) {
+          bukaModal('login');
+          return;
+        }
 
-        // Hubungi Edge Function 'create-payment'
-        const res = await fetch(`${supabaseUrl}/functions/v1/create-payment`, {
+        // Tampilkan loading state di tombol
+        const buttons = document.querySelectorAll(`[onclick="pilihPaket('${selectedTier}')"]`);
+        buttons.forEach(btn => {
+          btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i>Memproses...';
+          btn.style.pointerEvents = 'none';
+        });
+
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/create-payment`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -1337,26 +1801,246 @@
 
         const data = await res.json();
 
-        if (!res.ok) throw new Error(data.message || 'Gagal membuat tagihan');
+        // Kembalikan tampilan tombol
+        buttons.forEach(btn => {
+          btn.innerHTML = `Pilih Paket ${selectedTier}`;
+          btn.style.pointerEvents = '';
+        });
 
-        // Buka Popup Midtrans
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || 'Gagal membuat tagihan');
+        }
+
         window.snap.pay(data.snap_token, {
-          onSuccess: function () {
-            alert("Pembayaran Berhasil! Cek email Anda untuk kode lisensi.");
+          onSuccess: async function(result) {
+            tampilkanSuksesPayment(selectedTier, result.order_id);
+            selectedTier = '';
           },
-          onPending: function () {
-            alert("Menunggu pembayaran. Silakan selesaikan tagihan Anda.");
+          onPending: function() {
+            tampilkanPesanPayment(
+              'warning',
+              'Pembayaran Menunggu',
+              'Selesaikan pembayaran Anda. Token lisensi akan dikirim ke email setelah pembayaran terkonfirmasi.',
+              'fas fa-clock text-amber-400'
+            );
           },
-          onError: function () {
-            alert("Pembayaran gagal. Silakan coba lagi.");
+          onError: function() {
+            tampilkanPesanPayment(
+              'error',
+              'Pembayaran Gagal',
+              'Terjadi kesalahan saat pembayaran. Silakan coba lagi.',
+              'fas fa-circle-xmark text-red-400'
+            );
+          },
+          onClose: function() {
+            selectedTier = '';
           }
         });
 
       } catch (err) {
         console.error(err);
-        alert("Terjadi kesalahan: " + err.message);
+        alert('Terjadi kesalahan: ' + err.message);
       }
     }
+
+    async function klaimFreeTrial() {
+      if (!activeUser) {
+        bukaModal('login');
+        return;
+      }
+
+      // Tampilkan loading di tombol
+      const buttons = document.querySelectorAll('[onclick="klaimFreeTrial()"]');
+      buttons.forEach(btn => {
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i>Memproses...';
+        btn.style.pointerEvents = 'none';
+      });
+
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/claim-free-license`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`
+          }
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          tampilkanSuksesPayment('Free Trial', 'KLAIM-FREE');
+        } else {
+          alert(data.message || 'Gagal mengklaim paket free.');
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert('Terjadi kesalahan saat klaim: ' + err.message);
+      } finally {
+        buttons.forEach(btn => {
+          btn.innerHTML = 'Coba Gratis';
+          btn.style.pointerEvents = '';
+        });
+      }
+    }
+
+    function tampilkanSuksesPayment(tier, orderId) {
+      // Buka modal sukses (simple alert yang elegant)
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[60] px-4';
+      modal.innerHTML = `
+        <div class="bg-slate-800 border border-teal-500/30 w-full max-w-md rounded-2xl p-8 text-center shadow-2xl">
+          <div class="w-16 h-16 bg-teal-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-circle-check text-teal-400 text-3xl"></i>
+          </div>
+          <h3 class="text-white text-xl font-bold mb-2">Pembayaran Berhasil!</h3>
+          <p class="text-slate-400 text-sm leading-relaxed mb-6">
+            Terima kasih! Token lisensi <strong class="text-teal-400">Paket ${tier}</strong> sedang disiapkan
+            dan akan dikirim ke email Anda dalam beberapa menit.
+          </p>
+          <div class="bg-slate-900/60 rounded-xl p-4 border border-slate-700 mb-6 text-left">
+            <p class="text-xs text-slate-400 mb-1">ID Transaksi</p>
+            <p class="text-white text-sm font-mono">${orderId}</p>
+          </div>
+          <div class="flex gap-3">
+            <button onclick="this.closest('.fixed').remove();"
+              class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-xl text-sm transition-all">
+              Selesai
+            </button>
+            <button onclick="this.closest('.fixed').remove();"
+              class="flex-1 border border-slate-600 hover:border-slate-400 text-slate-400 hover:text-white
+                     font-bold py-3 rounded-xl text-sm transition-all">
+              Tutup
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+
+    function tampilkanPesanPayment(type, title, msg, iconClass) {
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[60] px-4';
+
+      const borderCls = type === 'warning' ? 'border-amber-500/30' : 'border-red-500/30';
+
+      modal.innerHTML = `
+        <div class="bg-slate-800 border ${borderCls} w-full max-w-md rounded-2xl p-8 text-center shadow-2xl">
+          <i class="${iconClass} text-4xl mb-4"></i>
+          <h3 class="text-white text-xl font-bold mb-2">${title}</h3>
+          <p class="text-slate-400 text-sm leading-relaxed mb-6">${msg}</p>
+          <button onclick="this.closest('.fixed').remove();"
+            class="w-full border border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white
+                   font-bold py-3 rounded-xl text-sm transition-all">
+            Tutup
+          </button>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    // ============================================================
+    // RESET PASSWORD (handle saat redirect dari email)
+    // ============================================================
+
+    async function handlePasswordResetFromUrl() {
+      const hash   = window.location.hash;
+      const params = new URLSearchParams(window.location.search);
+
+      if (!hash.includes('type=recovery') && !params.get('reset')) return;
+
+      // Tampilkan modal reset password
+      const modal = document.createElement('div');
+      modal.id    = 'resetModal';
+      modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[70] px-4';
+      modal.innerHTML = `
+        <div class="bg-slate-800 border border-slate-700 w-full max-w-md rounded-2xl p-8 shadow-2xl">
+          <div class="text-center mb-6">
+            <div class="w-14 h-14 bg-indigo-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
+              <i class="fas fa-lock-open text-indigo-400 text-xl"></i>
+            </div>
+            <h3 class="text-white text-xl font-bold">Buat Password Baru</h3>
+            <p class="text-slate-400 text-sm mt-1">Masukkan password baru untuk akun Anda.</p>
+          </div>
+          <div id="resetError" class="hidden mb-4 p-3 bg-red-900/50 border border-red-500/50 rounded-lg text-sm text-red-300"></div>
+          <div id="resetSuccess" class="hidden mb-4 p-3 bg-green-900/50 border border-green-500/50 rounded-lg text-sm text-green-300"></div>
+          <form onsubmit="submitResetPassword(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Password Baru</label>
+              <input type="password" id="newPassword" required minlength="8"
+                placeholder="Minimal 8 karakter"
+                class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm
+                       focus:border-indigo-500 focus:outline-none transition-all placeholder-slate-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Konfirmasi Password</label>
+              <input type="password" id="confirmNewPassword" required
+                placeholder="Ulangi password baru"
+                class="w-full bg-slate-900 border border-slate-600 rounded-xl px-4 py-3 text-white text-sm
+                       focus:border-indigo-500 focus:outline-none transition-all placeholder-slate-500" />
+            </div>
+            <button type="submit" id="resetSubmitBtn"
+              class="w-full bg-indigo-600 hover:bg-indigo-700 p-3 rounded-xl font-bold text-white transition-all">
+              Simpan Password Baru
+            </button>
+          </form>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    async function submitResetPassword(e) {
+      e.preventDefault();
+      const newPwd  = document.getElementById('newPassword').value;
+      const confirm = document.getElementById('confirmNewPassword').value;
+      const btn     = document.getElementById('resetSubmitBtn');
+      const errBox  = document.getElementById('resetError');
+      const sucBox  = document.getElementById('resetSuccess');
+
+      errBox.classList.add('hidden');
+      sucBox.classList.add('hidden');
+
+      if (newPwd !== confirm) {
+        errBox.innerText = 'Password tidak sama.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled   = true;
+      btn.innerText  = 'Menyimpan...';
+
+      const { error } = await sb.auth.updateUser({ password: newPwd });
+
+      if (error) {
+        errBox.innerText = 'Gagal: ' + error.message;
+        errBox.classList.remove('hidden');
+        btn.disabled  = false;
+        btn.innerText = 'Simpan Password Baru';
+        return;
+      }
+
+      sucBox.innerText = 'Password berhasil diubah! Anda akan dialihkan...';
+      sucBox.classList.remove('hidden');
+      btn.disabled = true;
+
+      setTimeout(() => {
+        document.getElementById('resetModal')?.remove();
+        // Bersihkan URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }, 2500);
+    }
+
+    // Jalankan cek reset password saat halaman load
+    window.addEventListener('load', () => {
+      handlePasswordResetFromUrl();
+    });
+
+    // Tutup modal saat klik backdrop
+    document.getElementById('authModal').addEventListener('click', function(e) {
+      if (e.target === this) tutupModal();
+    });
   </script>
 </body>
 

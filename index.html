@@ -234,7 +234,10 @@
       background: rgba(13,148,136,0.04);
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-YVNorDG5HZyKCjun"></script>
 </head>
+
 <body class="bg-white text-gray-800 antialiased">
 
   <!-- ===== FLOATING WHATSAPP ===== -->
@@ -654,7 +657,7 @@
             </li>
 
           </ul>
-          <a href="https://wa.me/6281234899273?text=Saya%20ingin%20berlangganan%20Paket%20Basic%20NextFlow%20Pro" target="_blank"
+          <a href="javascript:void(0)" onclick="pilihPaket('Basic')"
              class="block text-center border-2 font-bold py-3.5 rounded-xl transition-all hover:border-teal-500 hover:text-teal-600 text-gray-700" style="border-color:#0d9488;color:#0d9488;">
             Pilih Paket Basic
           </a>
@@ -699,7 +702,7 @@
             </li>
 
           </ul>
-          <a href="https://wa.me/6281234899273?text=Saya%20ingin%20berlangganan%20Paket%20Pro%20NextFlow%20Pro" target="_blank"
+          <a href="javascript:void(0)" onclick="pilihPaket('Pro')"
              class="btn-cta block text-center font-bold py-3.5 rounded-xl" style="color:#0f2557;">
             Pilih Paket Pro
           </a>
@@ -1213,5 +1216,148 @@
       });
     });
   </script>
+  <div id="authModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-md p-8 rounded-2xl shadow-2xl text-left">
+      <h3 id="modalTitle" class="text-2xl font-bold text-white">Login Akun</h3>
+      <p class="text-sm text-slate-400 mt-1">Silakan login untuk menyimpan lisensi Anda.</p>
+
+      <div id="authError" class="hidden mt-4 p-3 bg-red-900/50 border border-red-500 rounded text-sm text-red-200"></div>
+
+      <form id="authForm" onsubmit="handleAuth(event)" class="mt-6 space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-300">Email</label>
+          <input type="email" id="emailInput" required class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-indigo-500 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-300">Password</label>
+          <input type="password" id="passwordInput" required class="mt-1 w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-indigo-500 focus:outline-none" />
+        </div>
+
+        <button type="submit" id="submitBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 p-3 rounded-lg font-bold text-white transition">
+          Masuk / Lanjutkan
+        </button>
+      </form>
+
+      <button onclick="tutupModal()" class="mt-8 w-full text-xs text-slate-500 hover:text-slate-300 text-center uppercase tracking-widest">Batal</button>
+    </div>
+  </div>
+
+  <script>
+    // 1. Inisialisasi Supabase
+    const supabaseUrl = 'https://bwnwjdvmjihrymtwqgqb.supabase.co';
+    const supabasePublishableKey = 'sb_publishable_CcOtzzFTtjlbZBUOSd0UZA_zqnNWNAM';
+    const supabaseClient = supabase.createClient(supabaseUrl, supabasePublishableKey);
+
+    let activeUser = null;
+    let selectedTier = '';
+
+    // 2. Cek apakah user sudah login saat web dibuka
+    async function checkSession() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      activeUser = session ? session.user : null;
+      if (activeUser) {
+        console.log("User login sebagai:", activeUser.email);
+      }
+    }
+    checkSession();
+
+    // 3. Fungsi saat tombol "Beli Paket" diklik
+    function pilihPaket(tier) {
+      selectedTier = tier;
+      if (!activeUser) {
+        // Jika belum login, buka modal login
+        document.getElementById('authModal').classList.remove('hidden');
+      } else {
+        // Jika sudah login, langsung proses ke Midtrans
+        prosesCheckout();
+      }
+    }
+
+    function tutupModal() {
+      document.getElementById('authModal').classList.add('hidden');
+    }
+
+    // 4. Fungsi Login / Register otomatis via Supabase Auth
+    async function handleAuth(e) {
+      e.preventDefault();
+      const email = document.getElementById('emailInput').value;
+      const password = document.getElementById('passwordInput').value;
+      const btn = document.getElementById('submitBtn');
+      const errBox = document.getElementById('authError');
+
+      btn.innerText = "Memproses...";
+      errBox.classList.add('hidden');
+
+      try {
+        // Coba login dulu
+        let { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+        // Jika akun belum ada (error), otomatis buatkan akun baru (Register)
+        if (error && (error.message.includes("Invalid login") || error.message.includes("Email not confirmed"))) {
+          const res = await supabaseClient.auth.signUp({ email, password });
+          data = res.data;
+          error = res.error;
+          if (!error) alert("Akun baru berhasil dibuat!");
+        }
+
+        if (error) throw error;
+
+        activeUser = data.user;
+        tutupModal();
+
+        // Lanjutkan proses beli karena user sudah berhasil login
+        prosesCheckout();
+
+      } catch (err) {
+        errBox.innerText = err.message;
+        errBox.classList.remove('hidden');
+      } finally {
+        btn.innerText = "Masuk / Lanjutkan";
+      }
+    }
+
+    // 5. Menghubungi Edge Function & Midtrans Snap
+    async function prosesCheckout() {
+      if (!activeUser || !selectedTier) return;
+
+      alert(`Memproses tagihan untuk paket ${selectedTier}... Mohon tunggu.`);
+
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+
+        // Hubungi Edge Function 'create-payment'
+        const res = await fetch(`${supabaseUrl}/functions/v1/create-payment`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`
+          },
+          body: JSON.stringify({ tier: selectedTier })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.message || 'Gagal membuat tagihan');
+
+        // Buka Popup Midtrans
+        window.snap.pay(data.snap_token, {
+          onSuccess: function () {
+            alert("Pembayaran Berhasil! Cek email Anda untuk kode lisensi.");
+          },
+          onPending: function () {
+            alert("Menunggu pembayaran. Silakan selesaikan tagihan Anda.");
+          },
+          onError: function () {
+            alert("Pembayaran gagal. Silakan coba lagi.");
+          }
+        });
+
+      } catch (err) {
+        console.error(err);
+        alert("Terjadi kesalahan: " + err.message);
+      }
+    }
+  </script>
 </body>
+
 </html>

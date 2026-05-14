@@ -260,6 +260,21 @@ serve(async (req) => {
       })
       .eq("order_id", orderId);
 
+    // Update subscription_tier di tabel profiles agar sinkron dengan aplikasi
+    await adminClient
+      .from("profiles")
+      .update({ subscription_tier: tx.tier })
+      .eq("id", tx.user_id);
+
+    // Hapus otomatis paket Free jika user membeli paket berbayar (Upgrade)
+    if (tx.tier === "Pro" || tx.tier === "Basic") {
+      await adminClient
+        .from("user_licenses")
+        .delete()
+        .eq("user_id", tx.user_id)
+        .eq("tier_type", "Free");
+    }
+
     return new Response(
       JSON.stringify({
         success: true,

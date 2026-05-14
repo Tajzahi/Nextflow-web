@@ -1425,9 +1425,9 @@
     // KONFIGURASI
     // ============================================================
     const SUPABASE_URL  = 'https://bwnwjdvmjihrymtwqgqb.supabase.co';
-    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3bndqZHZtamlocnltdHdxZ3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1MTA2OTYsImV4cCI6MjA2MjA4NjY5Nn0.f7rOlwN6dPRCJbzq_tnD7-jGfcGJ0prEInQaVQcRBWw';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_CcOtzzFTtjlbZBUOSd0UZA_zqnNWNAM';
 
-    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
     let activeUser = null;
     let selectedTier = '';
@@ -1840,6 +1840,48 @@
       } catch (err) {
         console.error(err);
         alert('Terjadi kesalahan: ' + err.message);
+      }
+    }
+
+    async function klaimFreeTrial() {
+      if (!activeUser) {
+        bukaModal('login');
+        return;
+      }
+
+      // Tampilkan loading di tombol
+      const buttons = document.querySelectorAll('[onclick="klaimFreeTrial()"]');
+      buttons.forEach(btn => {
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i>Memproses...';
+        btn.style.pointerEvents = 'none';
+      });
+
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/claim-free-license`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`
+          }
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          tampilkanSuksesPayment('Free Trial', 'KLAIM-FREE');
+        } else {
+          alert(data.message || 'Gagal mengklaim paket free.');
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert('Terjadi kesalahan saat klaim: ' + err.message);
+      } finally {
+        buttons.forEach(btn => {
+          btn.innerHTML = 'Coba Gratis';
+          btn.style.pointerEvents = '';
+        });
       }
     }
 
